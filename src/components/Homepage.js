@@ -6,8 +6,6 @@ function Homepage() {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
 
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
@@ -64,72 +62,39 @@ function Homepage() {
         <button type="submit" className="search-button">Search</button>
       </form>
 
-      {isSearching ? (
-        <section className="search-results-section">
-          <h2>Search Results</h2>
-          <div className="movie-grid">
-            {searchResults?.map(movie => (
-              <div 
-                className="movie-card" 
-                key={movie.id}
-                onClick={() => handleMovieClick(movie.id)}
-                style={{ cursor: 'pointer' }}
-              >
+      <section className="trending-section">
+        <h2>Trending This Week</h2>
+        <div className="movie-grid">
+          {trendingMovies?.map(movie => (
+            <Link to={`/movie/${movie.id}`} key={movie.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="movie-card">
                 <img 
-                  src={movie.poster_path 
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : 'path-to-placeholder-image'} 
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
                   alt={movie.title}
                 />
                 <h3>{movie.title}</h3>
-                <p>{movie.release_date}</p>
-                <button onClick={(e) => {
-                  e.stopPropagation(); 
-                  /* Add save functionality later */
-                }}>
-                  Save to List
-                </button>
               </div>
-            )) || <p>No results found</p>}
-          </div>
-        </section>
-      ) : (
-        <>
-          <section className="trending-section">
-            <h2>Trending This Week</h2>
-            <div className="movie-grid">
-              {trendingMovies?.map(movie => (
-                <Link to={`/movie/${movie.id}`} key={movie.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div className="movie-card">
-                    <img 
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
-                      alt={movie.title}
-                    />
-                    <h3>{movie.title}</h3>
-                  </div>
-                </Link>
-              )) || <p>Loading trending movies...</p>}
-            </div>
-          </section>
+            </Link>
+          )) || <p>Loading trending movies...</p>}
+        </div>
+      </section>
 
-          <section className="popular-section">
-            <h2>Popular Movies</h2>
-            <div className="movie-grid">
-              {popularMovies?.map(movie => (
-                <Link to={`/movie/${movie.id}`} key={movie.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div className="movie-card">
-                    <img 
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
-                      alt={movie.title}
-                    />
-                    <h3>{movie.title}</h3>
-                  </div>
-                </Link>
-              )) || <p>Loading popular movies...</p>}
-            </div>
-          </section>
-        </>
-      )}
+      <section className="popular-section">
+        <h2>Popular Movies</h2>
+        <div className="movie-grid">
+          {popularMovies?.map(movie => (
+            <Link to={`/movie/${movie.id}`} key={movie.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="movie-card">
+                <img 
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                  alt={movie.title}
+                />
+                <h3>{movie.title}</h3>
+              </div>
+            </Link>
+          )) || <p>Loading popular movies...</p>}
+        </div>
+      </section>
     </div>
   );
 }
