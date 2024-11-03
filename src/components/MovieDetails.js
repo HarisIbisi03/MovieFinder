@@ -34,9 +34,9 @@ function MovieDetails() {
     if (!isAlreadySaved) {
       const updateSavedMovies = [...existingSavedMovies, movie];
       localStorage.setItem("saved", JSON.stringify(updateSavedMovies));
-      alert(`${movie.title} har lagts till i din lista!`);
+      alert(`${movie.title} has been added to your list!`);
     } else {
-      alert("Denna film finns redan i din lista");
+      alert("This movie already exists in your list");
     }
   };
 

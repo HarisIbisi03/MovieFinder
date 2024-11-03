@@ -43,9 +43,9 @@ function SearchResults() {
     if (!isAlreadySaved) {
       const updateSavedMovies = [...existingSavedMovies, movie];
       localStorage.setItem("saved", JSON.stringify(updateSavedMovies));
-      alert(`${movie.title} har lagts till i din lista!`);
+      alert(`${movie.title} has been added to your list!`);
     } else {
-      alert("Denna film finns redan i din lista");
+      alert("This movie already exists in your list");
     }
   };
 
@@ -59,32 +59,34 @@ function SearchResults() {
       <div className="movie-grid">
         {searchResults.length > 0 ? (
           searchResults.map((movie) => (
-            <Link
-              to={`/movie/${movie.id}`}
-              key={movie.id}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <div className="movie-card">
-                <img
-                  src={
-                    movie.poster_path
-                      ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                      : "path-to-placeholder-image"
-                  }
-                  alt={movie.title}
-                />
-                <h3>{movie.title}</h3>
-                <p>{movie.release_date}</p>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    saveMovie(movie);
-                  }}
-                >
-                  Save to List
-                </button>
-              </div>
-            </Link>
+            <div>
+              <Link
+                to={`/movie/${movie.id}`}
+                key={movie.id}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <div className="movie-card">
+                  <img
+                    src={
+                      movie.poster_path
+                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                        : "path-to-placeholder-image"
+                    }
+                    alt={movie.title}
+                  />
+                  <h3>{movie.title}</h3>
+                  <p>{movie.release_date}</p>
+                </div>
+              </Link>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  saveMovie(movie);
+                }}
+              >
+                Save to List
+              </button>
+            </div>
           ))
         ) : (
           <p>No results found</p>
