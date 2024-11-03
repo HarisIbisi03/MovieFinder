@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import MovieDetails from './MovieDetails';
 import Homepage from './Homepage';
+import SearchResults from './SearchResults';
 import '../App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/movie/:id" element={<MovieDetails />} />
+            <Route path="/search" element={<SearchResults />} />
           </Routes>
         </main>
       </div>

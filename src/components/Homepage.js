@@ -43,22 +43,7 @@ function Homepage() {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      setIsSearching(true);
-      try {
-        const response = await axios.get(`${API_URL}/search/movie`, {
-          params: {
-            api_key: API_KEY,
-            query: searchQuery,
-          }
-        });
-        setSearchResults(response.data.results);
-      } catch (error) {
-        console.error('Error searching movies:', error);
-        setSearchResults([]);
-      }
-    } else {
-      setIsSearching(false);
-      setSearchResults([]);
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
     }
   };
 
