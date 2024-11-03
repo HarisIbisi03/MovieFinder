@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const MovieSearch = () => {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
 
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
   const API_URL = 'https://api.themoviedb.org/3';
@@ -24,6 +26,10 @@ const MovieSearch = () => {
     }
   };
 
+  const handleMovieClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
+
   return (
     <div>
       <form onSubmit={searchMovies}>
@@ -38,7 +44,12 @@ const MovieSearch = () => {
 
       <div className="movie-grid">
         {movies.map(movie => (
-          <div key={movie.id} className="movie-card">
+          <div 
+            key={movie.id}
+            className="movie-card"
+            onClick={() => handleMovieClick(movie.id)}
+            style={{ cursor: 'pointer' }}
+          >
             <img 
               src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
               alt={movie.title}
