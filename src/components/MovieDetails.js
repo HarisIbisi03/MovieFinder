@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 function MovieDetails() {
   const [movie, setMovie] = useState(null);
+  const [cast, setCast] = useState([]);
   const { id } = useParams();
 
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
@@ -11,12 +12,18 @@ function MovieDetails() {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await fetch(
-          `${API_URL}/movie/${id}?api_key=${API_KEY}`
-        );
-        const data = await response.json();
-        console.log('Movie data:', data);
-        setMovie(data);
+        const [movieResponse, creditsResponse] = await Promise.all([
+          fetch(`${API_URL}/movie/${id}?api_key=${API_KEY}`),
+          fetch(`${API_URL}/movie/${id}/credits?api_key=${API_KEY}`)
+        ]);
+        
+        const [movieData, creditsData] = await Promise.all([
+          movieResponse.json(),
+          creditsResponse.json()
+        ]);
+        
+        setMovie(movieData);
+        setCast(creditsData.cast.slice(0, 6));
       } catch (error) {
         console.error('Error fetching movie details:', error);
       }
@@ -73,6 +80,30 @@ function MovieDetails() {
           <p className="movie-overview">{movie.overview || 'No overview available'}</p>
         </div>
       </div>
+      
+      {cast.length > 0 && (
+        <div className="cast-section">
+          <h3>Cast</h3>
+          <div className="movie-cast">
+            {cast.map((actor) => (
+              <div key={actor.id} className="cast-member">
+                {actor.profile_path ? (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
+                    alt={actor.name}
+                  />
+                ) : (
+                  <div className="no-profile">No Image</div>
+                )}
+                <div className="cast-info">
+                  <div className="actor-name">{actor.name}</div>
+                  <div className="character-name">{actor.character}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
