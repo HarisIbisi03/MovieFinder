@@ -63,29 +63,29 @@ function Homepage() {
           Search
         </button>
       </form>
-
-          <section className="trending-section">
-            <h2>Trending This Week</h2>
-            <div className="movie-grid">
-              {trendingMovies?.map((movie) => (
-                <Link
-                  to={`/movie/${movie.id}`}
-                  key={movie.id}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  <div className="movie-card">
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
-                    />
-                    <h3>{movie.title}</h3>
-                  </div>
-                </Link>
-              )) || <p>Loading trending movies...</p>}
-            </div>
-          </section>
-
-          <section className="trending-section">
+      {savedMovies.length > 0 && (
+            <section className="saved-movies-section">
+              <h2>Saved Movies</h2>
+              <div className="movie-grid">
+                {savedMovies.map((movie) => (
+                  <Link
+                    to={`/movie/${movie.id}`}
+                    key={movie.id}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <div className="movie-card">
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                        alt={movie.title}
+                      />
+                      <h3>{movie.title}</h3>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+      </section>
+      )}
+      <section className="trending-section">
         <h2>Trending This Week</h2>
         <div className="movie-grid">
           {trendingMovies?.map(movie => (
