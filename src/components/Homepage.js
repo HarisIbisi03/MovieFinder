@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 function Homepage() {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
 
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
-  const API_URL = 'https://api.themoviedb.org/3';
+  const API_URL = "https://api.themoviedb.org/3";
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const [trendingResponse, popularResponse] = await Promise.all([
           fetch(`${API_URL}/trending/movie/week?api_key=${API_KEY}`),
-          fetch(`${API_URL}/movie/popular?api_key=${API_KEY}`)
+          fetch(`${API_URL}/movie/popular?api_key=${API_KEY}`),
         ]);
 
         const trendingData = await trendingResponse.json();
@@ -31,7 +31,7 @@ function Homepage() {
           setPopularMovies(popularData.results.slice(0, 8));
         }
       } catch (error) {
-        console.error('Error fetching movies:', error);
+        console.error("Error fetching movies:", error);
         setTrendingMovies([]);
         setPopularMovies([]);
       }
@@ -61,34 +61,32 @@ function Homepage() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-input"
         />
-        <button type="submit" className="search-button">Search</button>
+        <button type="submit" className="search-button">
+          Search
+        </button>
       </form>
 
       {isSearching ? (
         <section className="search-results-section">
           <h2>Search Results</h2>
           <div className="movie-grid">
-            {searchResults?.map(movie => (
-              <div 
-                className="movie-card" 
+            {searchResults?.map((movie) => (
+              <div
+                className="movie-card"
                 key={movie.id}
                 onClick={() => handleMovieClick(movie.id)}
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
               >
-                <img 
-                  src={movie.poster_path 
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : 'path-to-placeholder-image'} 
+                <img
+                  src={
+                    movie.poster_path
+                      ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                      : "path-to-placeholder-image"
+                  }
                   alt={movie.title}
                 />
                 <h3>{movie.title}</h3>
                 <p>{movie.release_date}</p>
-                <button onClick={(e) => {
-                  e.stopPropagation(); 
-                  /* Add save functionality later */
-                }}>
-                  Save to List
-                </button>
               </div>
             )) || <p>No results found</p>}
           </div>
@@ -98,11 +96,15 @@ function Homepage() {
           <section className="trending-section">
             <h2>Trending This Week</h2>
             <div className="movie-grid">
-              {trendingMovies?.map(movie => (
-                <Link to={`/movie/${movie.id}`} key={movie.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              {trendingMovies?.map((movie) => (
+                <Link
+                  to={`/movie/${movie.id}`}
+                  key={movie.id}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
                   <div className="movie-card">
-                    <img 
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                       alt={movie.title}
                     />
                     <h3>{movie.title}</h3>
@@ -115,11 +117,15 @@ function Homepage() {
           <section className="popular-section">
             <h2>Popular Movies</h2>
             <div className="movie-grid">
-              {popularMovies?.map(movie => (
-                <Link to={`/movie/${movie.id}`} key={movie.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              {popularMovies?.map((movie) => (
+                <Link
+                  to={`/movie/${movie.id}`}
+                  key={movie.id}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
                   <div className="movie-card">
-                    <img 
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                       alt={movie.title}
                     />
                     <h3>{movie.title}</h3>
