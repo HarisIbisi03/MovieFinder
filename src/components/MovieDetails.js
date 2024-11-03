@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { json, useParams } from "react-router-dom";
 
 function MovieDetails() {
   const [movie, setMovie] = useState(null);
   const [cast, setCast] = useState([]);
   const { id } = useParams();
+  const [savedMovies, setSavedMovies] = useState([]);
 
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
-  const API_URL = 'https://api.themoviedb.org/3';
+  const API_URL = "https://api.themoviedb.org/3";
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -25,10 +26,17 @@ function MovieDetails() {
         setMovie(movieData);
         setCast(creditsData.cast.slice(0, 6));
       } catch (error) {
-        console.error('Error fetching movie details:', error);
+        console.error("Error fetching movie details:", error);
       }
     };
 
+    const loadSavedMovies = () => {
+      const existingSavedMovies =
+        JSON.parse(localStorage.getItem("saved")) || [];
+      setSavedMovies(existingSavedMovies);
+    };
+
+    loadSavedMovies();
     fetchMovieDetails();
   }, [id, API_KEY]);
 
@@ -43,6 +51,31 @@ function MovieDetails() {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
     return `${hours}h ${remainingMinutes}m`;
+  };
+
+  const saveMovie = (movie) => {
+    const isAlreadySaved = savedMovies.some(
+      (savedMovie) => savedMovie.id === movie.id
+    );
+
+    if (!isAlreadySaved) {
+      const updateSavedMovies = [...savedMovies, movie];
+      localStorage.setItem("saved", JSON.stringify(updateSavedMovies));
+      setSavedMovies(updateSavedMovies);
+      alert(`${movie.title} has been added to your list!`);
+    } else {
+      const updatedSavedMovies = savedMovies.filter(
+        (savedMovie) => savedMovie.id !== movie.id
+      );
+      localStorage.setItem("saved", JSON.stringify(updatedSavedMovies));
+      setSavedMovies(updatedSavedMovies);
+      alert(`${movie.title} has been removed from your list!`);
+    }
+  };
+
+  const isMovieSaved = (movieId) => {
+    const existingSavedMovies = JSON.parse(localStorage.getItem("saved")) || [];
+    return existingSavedMovies.some((savedMovie) => savedMovie.id === movieId);
   };
 
   if (!movie) {
@@ -104,6 +137,9 @@ function MovieDetails() {
           </div>
         </div>
       )}
+      <button className="save-movie-button" onClick={() => saveMovie(movie)}>
+        {isMovieSaved(movie.id) ? "Remove from List" : "Save to List"}
+      </button>
     </div>
   );
 }
