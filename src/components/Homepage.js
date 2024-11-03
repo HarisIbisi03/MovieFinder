@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Homepage() {
@@ -43,10 +42,6 @@ function Homepage() {
     if (searchQuery.trim()) {
       navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
     }
-  };
-
-  const handleMovieClick = (movieId) => {
-    navigate(`/movie/${movieId}`);
   };
 
   return (
