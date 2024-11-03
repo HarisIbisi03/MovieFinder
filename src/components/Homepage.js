@@ -6,6 +6,8 @@ function Homepage() {
   const [popularMovies, setPopularMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
 
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
@@ -41,10 +43,24 @@ function Homepage() {
     setSavedMovies(savedMovies);
   }, [API_KEY, API_URL]);
 
+  const handleMovieClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
+
   const handleSearch = async (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setIsSearching(true);
+      try {
+        const response = await fetch(
+          `${API_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(searchQuery)}`
+        );
+        const data = await response.json();
+        setSearchResults(data.results || []);
+      } catch (error) {
+        console.error("Error searching movies:", error);
+        setSearchResults([]);
+      }
     }
   };
 
