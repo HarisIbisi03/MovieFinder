@@ -6,7 +6,6 @@ function Homepage() {
   const [popularMovies, setPopularMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
 
