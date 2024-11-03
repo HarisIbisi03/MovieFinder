@@ -7,6 +7,7 @@ function SearchResults() {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const query = searchParams.get("query");
+  const [savedMovies, setSavedMovies] = useState([]);
 
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
   const API_URL = "https://api.themoviedb.org/3";
@@ -29,6 +30,12 @@ function SearchResults() {
       setIsLoading(false);
     };
 
+    const loadSavedMovies = () => {
+      const savedMovies = JSON.parse(localStorage.getItem("saved")) || [];
+      setSavedMovies(savedMovies);
+    };
+
+    loadSavedMovies();
     if (query) {
       fetchSearchResults();
     }
@@ -44,9 +51,19 @@ function SearchResults() {
       const updateSavedMovies = [...existingSavedMovies, movie];
       localStorage.setItem("saved", JSON.stringify(updateSavedMovies));
       alert(`${movie.title} has been added to your list!`);
+      setSavedMovies(updateSavedMovies);
     } else {
-      alert("This movie already exists in your list");
+      const updatedSavedMovies = existingSavedMovies.filter(
+        (savedMovie) => savedMovie.id !== movie.id
+      );
+      localStorage.setItem("saved", JSON.stringify(updatedSavedMovies));
+      alert(`${movie.title} has been removed from your list!`);
+      setSavedMovies(updatedSavedMovies);
     }
+  };
+
+  const isMovieSaved = (movieId) => {
+    return savedMovies.some((movie) => movie.id === movieId);
   };
 
   if (isLoading) {
@@ -79,12 +96,13 @@ function SearchResults() {
                 </div>
               </Link>
               <button
+                className="save-movie-button"
                 onClick={(e) => {
                   e.stopPropagation();
                   saveMovie(movie);
                 }}
               >
-                Save to List
+                {isMovieSaved(movie.id) ? "Remove from List" : "Save to List"}
               </button>
             </div>
           ))

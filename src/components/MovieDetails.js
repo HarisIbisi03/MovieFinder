@@ -4,6 +4,7 @@ import { json, useParams } from "react-router-dom";
 function MovieDetails() {
   const [movie, setMovie] = useState(null);
   const { id } = useParams();
+  const [savedMovies, setSavedMovies] = useState([]);
 
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
   const API_URL = "https://api.themoviedb.org/3";
@@ -22,22 +23,39 @@ function MovieDetails() {
       }
     };
 
+    const loadSavedMovies = () => {
+      const existingSavedMovies =
+        JSON.parse(localStorage.getItem("saved")) || [];
+      setSavedMovies(existingSavedMovies);
+    };
+
+    loadSavedMovies();
     fetchMovieDetails();
   }, [id, API_KEY]);
 
   const saveMovie = (movie) => {
-    const existingSavedMovies = JSON.parse(localStorage.getItem("saved")) || [];
-    const isAlreadySaved = existingSavedMovies.some(
+    const isAlreadySaved = savedMovies.some(
       (savedMovie) => savedMovie.id === movie.id
     );
 
     if (!isAlreadySaved) {
-      const updateSavedMovies = [...existingSavedMovies, movie];
+      const updateSavedMovies = [...savedMovies, movie];
       localStorage.setItem("saved", JSON.stringify(updateSavedMovies));
+      setSavedMovies(updateSavedMovies);
       alert(`${movie.title} has been added to your list!`);
     } else {
-      alert("This movie already exists in your list");
+      const updatedSavedMovies = savedMovies.filter(
+        (savedMovie) => savedMovie.id !== movie.id
+      );
+      localStorage.setItem("saved", JSON.stringify(updatedSavedMovies));
+      setSavedMovies(updatedSavedMovies);
+      alert(`${movie.title} has been removed from your list!`);
     }
+  };
+
+  const isMovieSaved = (movieId) => {
+    const existingSavedMovies = JSON.parse(localStorage.getItem("saved")) || [];
+    return existingSavedMovies.some((savedMovie) => savedMovie.id === movieId);
   };
 
   if (!movie) {
@@ -62,7 +80,9 @@ function MovieDetails() {
         <p>Rating: {movie.vote_average ? `${movie.vote_average}/10` : "N/A"}</p>
         <p>{movie.overview || "No overview available"}</p>
       </div>
-      <button onClick={() => saveMovie(movie)}>Save to List</button>
+      <button className="save-movie-button" onClick={() => saveMovie(movie)}>
+        {isMovieSaved(movie.id) ? "Remove from List" : "Save to List"}
+      </button>
     </div>
   );
 }
