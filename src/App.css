@@ -235,3 +235,76 @@ section h2 {
 .cast-section h3 {
   margin-bottom: 20px;
 }
+
+@media screen and (max-width: 768px) {
+  .movie-details-content {
+    flex-direction: column;
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .movie-poster img {
+    max-width: 100%;
+  }
+
+  .movie-title {
+    font-size: 1.8rem;
+  }
+
+  .search-input {
+    width: 60%;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+  }
+
+  .cast-member img {
+    height: 180px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .homepage {
+    padding: 10px;
+  }
+
+  .search-form {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .search-input {
+    width: 90%;
+    border-radius: 16px;
+  }
+
+  .search-button {
+    width: 95%;
+    border-radius: 16px;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+  }
+
+  .movie-meta {
+    gap: 8px;
+    font-size: 0.9rem;
+  }
+
+  .movie-overview {
+    font-size: 1rem;
+  }
+
+  .cast-member img {
+    height: 160px;
+  }
+}
