@@ -109,6 +109,9 @@ function MovieDetails() {
           <div className="movie-score">
             <span>⭐ {movie.vote_average ? `${movie.vote_average.toFixed(1)}/10` : 'N/A'}</span>
           </div>
+          <button className="save-movie-button" onClick={() => saveMovie(movie)}>
+              {isMovieSaved(movie.id) ? "Remove from List" : "Save to List"}
+            </button>
           <h3>Overview</h3>
           <p className="movie-overview">{movie.overview || 'No overview available'}</p>
         </div>
@@ -137,9 +140,6 @@ function MovieDetails() {
           </div>
         </div>
       )}
-      <button className="save-movie-button" onClick={() => saveMovie(movie)}>
-        {isMovieSaved(movie.id) ? "Remove from List" : "Save to List"}
-      </button>
     </div>
   );
 }
