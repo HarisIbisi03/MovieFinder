@@ -42,24 +42,10 @@ function Homepage() {
     setSavedMovies(savedMovies);
   }, [API_KEY, API_URL]);
 
-  const handleMovieClick = (movieId) => {
-    navigate(`/movie/${movieId}`);
-  };
-
   const handleSearch = async (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      setIsSearching(true);
-      try {
-        const response = await fetch(
-          `${API_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(searchQuery)}`
-        );
-        const data = await response.json();
-        setSearchResults(data.results || []);
-      } catch (error) {
-        console.error("Error searching movies:", error);
-        setSearchResults([]);
-      }
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -77,56 +63,6 @@ function Homepage() {
           Search
         </button>
       </form>
-
-      {isSearching ? (
-        <section className="search-results-section">
-          <h2>Search Results</h2>
-          <div className="movie-grid">
-            {searchResults?.map((movie) => (
-              <div
-                className="movie-card"
-                key={movie.id}
-                onClick={() => handleMovieClick(movie.id)}
-                style={{ cursor: "pointer" }}
-              >
-                <img
-                  src={
-                    movie.poster_path
-                      ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                      : "path-to-placeholder-image"
-                  }
-                  alt={movie.title}
-                />
-                <h3>{movie.title}</h3>
-                <p>{movie.release_date}</p>
-              </div>
-            )) || <p>No results found</p>}
-          </div>
-        </section>
-      ) : (
-        <>
-          {savedMovies.length > 0 && (
-            <section className="saved-movies-section">
-              <h2>Saved Movies</h2>
-              <div className="movie-grid">
-                {savedMovies.map((movie) => (
-                  <Link
-                    to={`/movie/${movie.id}`}
-                    key={movie.id}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <div className="movie-card">
-                      <img
-                        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                        alt={movie.title}
-                      />
-                      <h3>{movie.title}</h3>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
 
           <section className="trending-section">
             <h2>Trending This Week</h2>
@@ -149,28 +85,39 @@ function Homepage() {
             </div>
           </section>
 
-          <section className="popular-section">
-            <h2>Popular Movies</h2>
-            <div className="movie-grid">
-              {popularMovies?.map((movie) => (
-                <Link
-                  to={`/movie/${movie.id}`}
-                  key={movie.id}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  <div className="movie-card">
-                    <img
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
-                    />
-                    <h3>{movie.title}</h3>
-                  </div>
-                </Link>
-              )) || <p>Loading popular movies...</p>}
-            </div>
-          </section>
-        </>
-      )}
+          <section className="trending-section">
+        <h2>Trending This Week</h2>
+        <div className="movie-grid">
+          {trendingMovies?.map(movie => (
+            <Link to={`/movie/${movie.id}`} key={movie.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="movie-card">
+                <img 
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                  alt={movie.title}
+                />
+                <h3>{movie.title}</h3>
+              </div>
+            </Link>
+          )) || <p>Loading trending movies...</p>}
+        </div>
+      </section>
+
+      <section className="popular-section">
+        <h2>Popular Movies</h2>
+        <div className="movie-grid">
+          {popularMovies?.map(movie => (
+            <Link to={`/movie/${movie.id}`} key={movie.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="movie-card">
+                <img 
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                  alt={movie.title}
+                />
+                <h3>{movie.title}</h3>
+              </div>
+            </Link>
+          )) || <p>Loading popular movies...</p>}
+        </div>
+      </section>
     </div>
   );
 }
