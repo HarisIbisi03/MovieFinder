@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 function Homepage() {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
+  const [savedMovies, setSavedMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -38,6 +39,9 @@ function Homepage() {
     };
 
     fetchMovies();
+
+    const savedMovies = JSON.parse(localStorage.getItem("saved")) || [];
+    setSavedMovies(savedMovies);
   }, [API_KEY, API_URL]);
 
   const handleSearch = async (e) => {
@@ -93,6 +97,29 @@ function Homepage() {
         </section>
       ) : (
         <>
+          {savedMovies.length > 0 && (
+            <section className="saved-movies-section">
+              <h2>Saved Movies</h2>
+              <div className="movie-grid">
+                {savedMovies.map((movie) => (
+                  <Link
+                    to={`/movie/${movie.id}`}
+                    key={movie.id}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <div className="movie-card">
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                        alt={movie.title}
+                      />
+                      <h3>{movie.title}</h3>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section className="trending-section">
             <h2>Trending This Week</h2>
             <div className="movie-grid">
