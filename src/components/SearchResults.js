@@ -6,6 +6,7 @@ function SearchResults() {
   const [searchParams] = useSearchParams();
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState('none');
   const query = searchParams.get('query');
 
   const API_KEY = process.env.REACT_APP_TMDB_KEY;
@@ -34,6 +35,18 @@ function SearchResults() {
     }
   }, [query, API_KEY]);
 
+  const getSortedResults = () => {
+    if (sortOrder === 'none') return searchResults;
+    
+    return [...searchResults].sort((a, b) => {
+      if (sortOrder === 'high-to-low') {
+        return b.vote_average - a.vote_average;
+      } else {
+        return a.vote_average - b.vote_average;
+      }
+    });
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -41,9 +54,20 @@ function SearchResults() {
   return (
     <div className="search-results-page">
       <h2>Search Results for "{query}"</h2>
+      <div className="sorting-controls">
+        <label>Sort by rating: </label>
+        <select 
+          value={sortOrder} 
+          onChange={(e) => setSortOrder(e.target.value)}
+        >
+          <option value="none">None</option>
+          <option value="high-to-low">Highest Rated First</option>
+          <option value="low-to-high">Lowest Rated First</option>
+        </select>
+      </div>
       <div className="movie-grid">
         {searchResults.length > 0 ? (
-          searchResults.map(movie => (
+          getSortedResults().map(movie => (
             <Link 
               to={`/movie/${movie.id}`} 
               key={movie.id} 
@@ -57,7 +81,7 @@ function SearchResults() {
                   alt={movie.title}
                 />
                 <h3>{movie.title}</h3>
-                <p>{movie.release_date}</p>
+                <p>{movie.release_date ? movie.release_date.split('-')[0] : 'N/A'}</p>
                 <button onClick={(e) => {
                   e.stopPropagation(); 
                   /* Add save functionality later */
