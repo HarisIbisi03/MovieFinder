@@ -39,7 +39,7 @@ function MovieDetails() {
         />
       )}
       <div className="movie-info">
-        <p>Release Year: {movie.release_date ? movie.release_date.split('-')[0] : 'N/A'}</p>
+        <p>Release date: {movie.release_date}</p>
         <p>Runtime: {movie.runtime ? `${movie.runtime} min` : 'N/A'}</p>
         <p>Rating: {movie.vote_average ? `${movie.vote_average}/10` : 'N/A'}</p>
         <p>{movie.overview || 'No overview available'}</p>
