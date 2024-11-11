@@ -13,3 +13,9 @@ A movie finder app built with React. Site uses TMDB API to fetch movie data, and
 # Why we used React instead of Angular or Vue
 
 We used React because we thought that the component based architecture was the most effective when it comes to reusing components and manage big applications. React is more flexible to use compared to Vue or Angular because of the components. React is also a JavaScript-library that we as a group have a bit of experience from, which is what made us choose React. We don't have any experience with either of Vue or Angular. The components that are created can manage their own states which makes it easier to build complex UIs by connecting the different components together. React uses virtual DOM which leads to better performances, and whilst Vue also utilizes virtual DOM, React is praised for it's speed and efficiency. React is also a library and not a framework, which makes it easier for us choose what we want to work with. It also helps us with creating dynamic web pages, which is what we needed for this project, because we can also create bigger programs with React. 
+
+# References
+
+[1] GeeksForGeeks, "React VS Angular VS Vue – Which Framework is the Best?," 2024. [Online]. Available: https://www.geeksforgeeks.org/react-vs-angular-vs-vue-which-framework-is-the-best/ (accessed: 2024-11-03)
+[2] M. Joshi, "Angular vs React vs Vue: Core Differences," _BrowserStack_, [Online], May. 11, 2023. Available: https://www.browserstack.com/guide/angular-vs-react-vs-vue (accessed: 2024-11-03)
+[3] GeeksForGeeks, "Why Choose React For Web Development in 2024," 2024. [Online]. Available: https://www.geeksforgeeks.org/why-choose-react-for-web-development/ (accessed: 2024-11-03)
